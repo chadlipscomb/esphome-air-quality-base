@@ -1,7 +1,4 @@
 substitutions:
-  devicename: airbox
-  friendly_name: Airbox
-
   # LED capability
   led_pin: GPIO21
 
@@ -31,15 +28,6 @@ substitutions:
   disp_rst: GPIO8
   disp_bl: GPIO7
   disp_rotation: "0"
-
-esphome:
-  name: ${devicename}
-  friendly_name: ${friendly_name}
-
-esp32:
-  board: esp32-s3-devkitc-1
-  framework:
-    type: esp-idf
 
 packages:
   common_base: !include ../common/base.yaml
