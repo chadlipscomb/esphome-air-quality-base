@@ -1,0 +1,1 @@
+# esphome-air-quality-base
