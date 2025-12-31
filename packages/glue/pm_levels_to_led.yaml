@@ -1,0 +1,10 @@
+sensor:
+  - platform: template
+    id: glue_pm_levels_to_led
+    internal: true
+    lambda: return 0;
+    update_interval: 5s
+    on_value:
+      then:
+        - lambda: |-
+            id(in_pm_level_text) = id(pm_worst_level).state;

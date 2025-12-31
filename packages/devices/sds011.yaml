@@ -1,0 +1,10 @@
+sensor:
+  - platform: sds011
+    uart_id: uart_a
+    update_interval: ${sds011_update}
+    pm_2_5:
+      name: "SDS011 PM2.5"
+      id: sds011_pm_2_5
+    pm_10_0:
+      name: "SDS011 PM10"
+      id: sds011_pm_10_0

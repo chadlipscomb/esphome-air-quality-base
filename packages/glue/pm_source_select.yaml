@@ -1,0 +1,23 @@
+# Selects which device feeds PM feature inputs.
+# Priority:
+# - Use SPS30 for PM1.0 (only source)
+# - Prefer SPS30 for PM2.5/PM10 when available; fall back to SDS011 when SPS30 is NAN
+
+sensor:
+  - platform: template
+    id: glue_pm_source_select
+    internal: true
+    lambda: return 0;
+    update_interval: 5s
+    on_value:
+      then:
+        - lambda: |-
+            float sps25 = id(sps30_pm_2_5).state;
+            float sps10 = id(sps30_pm_10_0).state;
+
+            float src25 = isnan(sps25) ? id(sds011_pm_2_5).state : sps25;
+            float src10 = isnan(sps10) ? id(sds011_pm_10_0).state : sps10;
+
+            id(in_pm25_ugm3) = src25;
+            id(in_pm10_ugm3) = src10;
+            id(in_pm1_ugm3)  = id(sps30_pm_1_0).state;

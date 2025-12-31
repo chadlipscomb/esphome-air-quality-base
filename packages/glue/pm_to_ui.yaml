@@ -1,0 +1,15 @@
+# Maps PM feature inputs + computed level into LVGL UI inputs.
+# Requires features/pm_levels.yaml and features/ui_lvgl.yaml.
+
+sensor:
+  - platform: template
+    id: glue_pm_to_ui
+    internal: true
+    lambda: return 0;
+    update_interval: 1s
+    on_value:
+      then:
+        - lambda: |-
+            id(ui_pm25) = id(in_pm25_ugm3);
+            id(ui_pm10) = id(in_pm10_ugm3);
+            id(ui_level) = id(pm_worst_level).state;

@@ -1,0 +1,13 @@
+sensor:
+  - platform: scd4x
+    i2c_id: i2c_a
+    update_interval: ${scd4x_update}
+    co2:
+      name: "SCD41 CO2"
+      id: scd41_co2
+    temperature:
+      name: "SCD41 Temperature"
+      id: scd41_temp
+    humidity:
+      name: "SCD41 Humidity"
+      id: scd41_humidity

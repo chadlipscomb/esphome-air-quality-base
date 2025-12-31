@@ -1,0 +1,18 @@
+globals:
+  - id: in_pm_level_text
+    type: std::string
+    restore_value: no
+    initial_value: '"Unknown"'
+
+interval:
+  - interval: 5s
+    then:
+      - lambda: |-
+          auto s = id(in_pm_level_text);
+
+          if (s == "Green")  { id(onboard_led).turn_on().set_brightness(0.35).set_rgb(0.0, 1.0, 0.0).perform(); return; }
+          if (s == "Yellow") { id(onboard_led).turn_on().set_brightness(0.35).set_rgb(1.0, 1.0, 0.0).perform(); return; }
+          if (s == "Orange") { id(onboard_led).turn_on().set_brightness(0.35).set_rgb(1.0, 0.55, 0.0).perform(); return; }
+          if (s == "Red")    { id(onboard_led).turn_on().set_brightness(0.35).set_rgb(1.0, 0.0, 0.0).perform(); return; }
+
+          id(onboard_led).turn_on().set_brightness(0.20).set_rgb(0.0, 0.0, 1.0).perform();

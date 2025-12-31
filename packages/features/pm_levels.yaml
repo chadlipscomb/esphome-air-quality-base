@@ -1,0 +1,80 @@
+globals:
+  - id: in_pm25_ugm3
+    type: float
+    restore_value: no
+    initial_value: "NAN"
+  - id: in_pm10_ugm3
+    type: float
+    restore_value: no
+    initial_value: "NAN"
+  - id: in_pm1_ugm3
+    type: float
+    restore_value: no
+    initial_value: "NAN"
+
+text_sensor:
+  - platform: template
+    name: "PM2.5 Level"
+    id: pm25_level
+    update_interval: 5s
+    lambda: |-
+      float v = id(in_pm25_ugm3);
+      if (isnan(v)) return std::string("Unknown");
+      if (v <= 10) return std::string("Green");
+      if (v <= 25) return std::string("Yellow");
+      if (v <= 50) return std::string("Orange");
+      return std::string("Red");
+
+  - platform: template
+    name: "PM10 Level"
+    id: pm10_level
+    update_interval: 5s
+    lambda: |-
+      float v = id(in_pm10_ugm3);
+      if (isnan(v)) return std::string("Unknown");
+      if (v <= 40)  return std::string("Green");
+      if (v <= 75)  return std::string("Yellow");
+      if (v <= 150) return std::string("Orange");
+      return std::string("Red");
+
+  - platform: template
+    name: "PM1.0 Level"
+    id: pm1_level
+    update_interval: 5s
+    lambda: |-
+      float v = id(in_pm1_ugm3);
+      if (isnan(v)) return std::string("Unknown");
+      if (v <= 5)  return std::string("Green");
+      if (v <= 10) return std::string("Yellow");
+      if (v <= 20) return std::string("Orange");
+      return std::string("Red");
+
+  - platform: template
+    name: "PM Worst Level"
+    id: pm_worst_level
+    update_interval: 5s
+    lambda: |-
+      auto sev_pm25 = [](float v)->int {
+        if (isnan(v)) return -1;
+        if (v <= 10) return 0;
+        if (v <= 25) return 1;
+        if (v <= 50) return 2;
+        return 3;
+      };
+      auto sev_pm10 = [](float v)->int {
+        if (isnan(v)) return -1;
+        if (v <= 40)  return 0;
+        if (v <= 75)  return 1;
+        if (v <= 150) return 2;
+        return 3;
+      };
+
+      int worst = -1;
+      worst = std::max(worst, sev_pm25(id(in_pm25_ugm3)));
+      worst = std::max(worst, sev_pm10(id(in_pm10_ugm3)));
+
+      if (worst < 0) return std::string("Unknown");
+      if (worst == 0) return std::string("Green");
+      if (worst == 1) return std::string("Yellow");
+      if (worst == 2) return std::string("Orange");
+      return std::string("Red");

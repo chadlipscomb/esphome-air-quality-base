@@ -1,0 +1,22 @@
+# Example: GC9A01 240x240 round SPI display
+# Requires packages/hw/spi_a.yaml in the profile
+
+output:
+  - platform: ledc
+    id: disp_backlight_pwm
+    pin: ${disp_bl}
+
+light:
+  - platform: monochromatic
+    id: display_backlight
+    name: "Display Backlight"
+    output: disp_backlight_pwm
+
+display:
+  - platform: gc9a01
+    id: disp
+    spi_id: spi_a
+    cs_pin: ${disp_cs}
+    dc_pin: ${disp_dc}
+    reset_pin: ${disp_rst}
+    rotation: ${disp_rotation}

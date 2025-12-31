@@ -1,0 +1,8 @@
+light:
+  - platform: esp32_rmt_led_strip
+    id: onboard_led
+    name: "On-board LED"
+    rgb_order: GRB
+    pin: ${led_pin}
+    num_leds: 1
+    chipset: ws2812

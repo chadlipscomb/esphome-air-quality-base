@@ -1,0 +1,5 @@
+spi:
+  - id: spi_a
+    clk_pin: ${spi_a_sck}
+    mosi_pin: ${spi_a_mosi}
+    miso_pin: ${spi_a_miso}

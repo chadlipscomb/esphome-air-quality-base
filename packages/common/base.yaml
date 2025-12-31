@@ -1,0 +1,15 @@
+logger:
+  # Frees UART hardware for sensors on S3 boards
+  baud_rate: 0
+
+api:
+ota:
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  ap:
+    ssid: "${devicename}-fallback"
+    password: !secret ap_password
+
+captive_portal:

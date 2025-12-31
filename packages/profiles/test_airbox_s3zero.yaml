@@ -1,0 +1,66 @@
+substitutions:
+  devicename: airbox
+  friendly_name: Airbox
+
+  # LED capability
+  led_pin: GPIO21
+
+  # I2C A bus pins (leave frequency unset; SPS30 can be picky)
+  i2c_a_scl: GPIO8
+  i2c_a_sda: GPIO7
+
+  # UART A pins (avoid uart0/1 naming entirely)
+  uart_a_tx: GPIO43
+  uart_a_rx: GPIO44
+  uart_a_baud: "9600"
+
+  # Device defaults
+  sds011_update: 1min
+  scd4x_update: 10s
+  sps30_addr: "0x69"
+  sps30_update: 10s
+  sps30_idle: 5min
+  sps30_sma_window: "6"
+
+  # Optional display (SPI A) pins (set if you enable display packages)
+  spi_a_sck: GPIO12
+  spi_a_mosi: GPIO11
+  spi_a_miso: GPIO13
+  disp_cs: GPIO10
+  disp_dc: GPIO9
+  disp_rst: GPIO8
+  disp_bl: GPIO7
+  disp_rotation: "0"
+
+esphome:
+  name: ${devicename}
+  friendly_name: ${friendly_name}
+
+esp32:
+  board: esp32-s3-devkitc-1
+  framework:
+    type: arduino
+
+packages:
+  common_base: !include ../common/base.yaml
+  common_status: !include ../common/status.yaml
+
+  hw_led: !include ../hw/led_onboard.yaml
+  hw_i2c_a: !include ../hw/i2c_a.yaml
+  hw_uart_a: !include ../hw/uart_a.yaml
+
+  dev_sps30: !include ../devices/sps30.yaml
+  dev_scd4x: !include ../devices/scd4x.yaml
+  dev_sds011: !include ../devices/sds011.yaml
+
+  feat_pm_levels: !include ../features/pm_levels.yaml
+  feat_led_status: !include ../features/pm_led_status.yaml
+
+  glue_pm_source_select: !include ../glue/pm_source_select.yaml
+  glue_levels_to_led: !include ../glue/pm_levels_to_led.yaml
+
+  # ---- Optional LVGL display stack (enable as a group) ----
+  # hw_spi_a: !include ../hw/spi_a.yaml
+  # disp_driver: !include ../displays/display_gc9a01.yaml
+  # feat_ui_lvgl: !include ../features/ui_lvgl.yaml
+  # glue_pm_to_ui: !include ../glue/pm_to_ui.yaml

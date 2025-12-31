@@ -1,0 +1,5 @@
+uart:
+  - id: uart_a
+    tx_pin: ${uart_a_tx}
+    rx_pin: ${uart_a_rx}
+    baud_rate: ${uart_a_baud}

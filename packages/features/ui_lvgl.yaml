@@ -1,0 +1,67 @@
+globals:
+  - id: ui_pm25
+    type: float
+    restore_value: no
+    initial_value: "NAN"
+  - id: ui_pm10
+    type: float
+    restore_value: no
+    initial_value: "NAN"
+  - id: ui_level
+    type: std::string
+    restore_value: no
+    initial_value: '"--"'
+
+lvgl:
+  displays:
+    - display_id: disp
+      id: lv_disp
+
+  widgets:
+    - label:
+        id: lbl_title
+        text: "${friendly_name}"
+        x: 10
+        y: 8
+
+    - label:
+        id: lbl_pm25
+        text: "PM2.5: --"
+        x: 10
+        y: 40
+
+    - label:
+        id: lbl_pm10
+        text: "PM10: --"
+        x: 10
+        y: 65
+
+    - label:
+        id: lbl_lvl
+        text: "Level: --"
+        x: 10
+        y: 90
+
+interval:
+  - interval: 1s
+    then:
+      - lvgl.label.update:
+          id: lbl_pm25
+          text: !lambda |-
+            if (isnan(id(ui_pm25))) return std::string("PM2.5: --");
+            char buf[32];
+            snprintf(buf, sizeof(buf), "PM2.5: %.0f", id(ui_pm25));
+            return std::string(buf);
+
+      - lvgl.label.update:
+          id: lbl_pm10
+          text: !lambda |-
+            if (isnan(id(ui_pm10))) return std::string("PM10: --");
+            char buf[32];
+            snprintf(buf, sizeof(buf), "PM10: %.0f", id(ui_pm10));
+            return std::string(buf);
+
+      - lvgl.label.update:
+          id: lbl_lvl
+          text: !lambda |-
+            return std::string("Level: ") + id(ui_level);

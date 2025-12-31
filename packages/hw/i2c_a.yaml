@@ -1,0 +1,8 @@
+i2c:
+  - id: i2c_a
+    scl: ${i2c_a_scl}
+    sda: ${i2c_a_sda}
+    # Leave frequency unset (SPS30 can be picky). ESPHome default will be used.
+    scan: true
+    sda_pullup_enabled: true
+    scl_pullup_enabled: true
