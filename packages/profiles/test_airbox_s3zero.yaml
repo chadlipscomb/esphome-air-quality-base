@@ -41,9 +41,9 @@ packages:
   dev_scd4x: !include ../devices/scd4x.yaml
   dev_sds011: !include ../devices/sds011.yaml
 
-  feat_pm_levels: !include ../features/pm_levels.yaml
+  #feat_pm_levels: !include ../features/pm_levels.yaml
   feat_led_status: !include ../features/pm_led_status.yaml
-
+  
   glue_pm_source_select: !include ../glue/pm_source_select.yaml
   glue_levels_to_led: !include ../glue/pm_levels_to_led.yaml
 
