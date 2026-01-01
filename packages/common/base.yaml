@@ -12,3 +12,4 @@ wifi:
 #    password: !secret ap_password
 #
 #captive_portal:
+logger:
