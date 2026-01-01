@@ -1,4 +1,3 @@
-
 sensor:
   - platform: sps30
     i2c_id: i2c_a
@@ -37,27 +36,10 @@ sensor:
         - sliding_window_moving_average:
             window_size: ${sps30_sma_window}
             send_every: 1
-    # Unnecessary counts (i think)
-    #pmc_0_5:
-    #  name: "SPS30 PMC0.5"
-    #  id: sps30_pmc_0_5
-    #pmc_1_0:
-    #  name: "SPS30 PMC1.0"
-    #  id: sps30_pmc_1_0
-    #pmc_2_5:
-    #  name: "SPS30 PMC2.5"
-    #  id: sps30_pmc_2_5
-    #pmc_4_0:
-    #  name: "SPS30 PMC4.0"
-    #  id: sps30_pmc_4_0
-    #pmc_10_0:
-    #  name: "SPS30 PMC10"
-    #  id: sps30_pmc_10_0
 
     pm_size:
       name: "SPS30 Typical Particle Size"
       id: sps30_pm_size
-
 
 
 text_sensor:
@@ -66,7 +48,7 @@ text_sensor:
     id: sps30_pm25_level
     update_interval: 5s
     lambda: |-
-      float v = id(sps30_pm_2_5);
+      float v = id(sps30_pm_2_5).state;
       if (isnan(v)) return std::string("Unknown");
       if (v <= 10) return std::string("Green");
       if (v <= 25) return std::string("Yellow");
@@ -78,7 +60,7 @@ text_sensor:
     id: sps30_pm10_level
     update_interval: 5s
     lambda: |-
-      float v = id(sps30_pm_10_0);
+      float v = id(sps30_pm_10_0).state;
       if (isnan(v)) return std::string("Unknown");
       if (v <= 40)  return std::string("Green");
       if (v <= 75)  return std::string("Yellow");
@@ -90,7 +72,7 @@ text_sensor:
     id: sps30_pm1_level
     update_interval: 5s
     lambda: |-
-      float v = id(sps30_pm_1_0);
+      float v = id(sps30_pm_1_0).state;
       if (isnan(v)) return std::string("Unknown");
       if (v <= 5)  return std::string("Green");
       if (v <= 10) return std::string("Yellow");
@@ -117,9 +99,12 @@ text_sensor:
         return 3;
       };
 
+      float pm25 = id(sps30_pm_2_5).state;
+      float pm10 = id(sps30_pm_10_0).state;
+
       int worst = -1;
-      worst = std::max(worst, sev_pm25(id(sps30_pm_2_5)));
-      worst = std::max(worst, sev_pm10(id(sps30_pm_10_0)));
+      worst = std::max(worst, sev_pm25(pm25));
+      worst = std::max(worst, sev_pm10(pm10));
 
       if (worst < 0) return std::string("Unknown");
       if (worst == 0) return std::string("Green");
