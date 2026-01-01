@@ -3,8 +3,8 @@ substitutions:
   led_pin: GPIO21
 
   # I2C A bus pins (leave frequency unset; SPS30 can be picky)
-  i2c_a_scl: GPIO8
-  i2c_a_sda: GPIO7
+  i2c_a_scl: GPIO6
+  i2c_a_sda: GPIO5
 
   # UART A pins (avoid uart0/1 naming entirely)
   uart_a_tx: GPIO43
@@ -20,14 +20,7 @@ substitutions:
   sps30_sma_window: "6"
 
   # Optional display (SPI A) pins (set if you enable display packages)
-  spi_a_sck: GPIO12
-  spi_a_mosi: GPIO11
-  spi_a_miso: GPIO13
-  disp_cs: GPIO10
-  disp_dc: GPIO9
-  disp_rst: GPIO8
-  disp_bl: GPIO7
-  disp_rotation: "0"
+
 
 
   led_light_id: onboard_led
@@ -43,10 +36,10 @@ packages:
 
   dev_sps30: !include ../devices/sps30.yaml
   dev_scd4x: !include ../devices/scd4x.yaml
-  dev_sds011: !include ../devices/sds011.yaml
+  #dev_sds011: !include ../devices/sds011.yaml
 
-  feat_led_mode_select: !include ../features/led_mode_select.yaml
-  glue_led_mode_auto_pm: !include ../glue/led_mode_auto_pm.yaml
+  #feat_led_mode_select: !include ../features/led_mode_select.yaml
+  #glue_led_mode_auto_pm: !include ../glue/led_mode_auto_pm.yaml
   # Will test managed updates later
   #feat_managed_update_on_boot: !include ../features/managed_update_on_boot.yaml
 
