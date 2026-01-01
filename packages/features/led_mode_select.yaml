@@ -20,15 +20,16 @@ script:
   - id: led_apply_mode
     mode: restart
     then:
+
       - if:
           condition:
-            lambda: 'return id(led_mode).state == "off";'
+            lambda: 'return id(led_mode).current_option() == "off";'
           then:
             - light.turn_off: ${led_light_id}
 
       - if:
           condition:
-            lambda: 'return id(led_mode).state == "manual";'
+            lambda: 'return id(led_mode).current_option() == "manual";'
           then:
             - light.turn_on:
                 id: ${led_light_id}

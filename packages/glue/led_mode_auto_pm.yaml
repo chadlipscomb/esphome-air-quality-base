@@ -7,7 +7,7 @@ interval:
     then:
       - if:
           condition:
-            lambda: 'return id(led_mode).state == "auto_pm";'
+            lambda: 'return id(led_mode).current_option() == "auto_pm";'
           then:
             - lambda: |-
                 auto s = id(${pm_worst_level_id}).state;
