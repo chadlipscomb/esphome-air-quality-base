@@ -29,6 +29,8 @@ substitutions:
   disp_bl: GPIO7
   disp_rotation: "0"
 
+  led_light_id: onboard_led
+  pm_worst_level_id: sps30_pm_worst_level
 packages:
   common_base: !include ../common/base.yaml
   common_status: !include ../common/status.yaml
@@ -41,6 +43,9 @@ packages:
   dev_scd4x: !include ../devices/scd4x.yaml
   dev_sds011: !include ../devices/sds011.yaml
 
+  feat_led_mode_select: !include ../features/led_mode_select.yaml
+  glue_led_mode_auto_pm: !include ../glue/led_mode_auto_pm.yaml
+  
   #feat_pm_levels: !include ../features/pm_levels.yaml
   #eat_led_status: !include ../features/pm_led_status.yaml
 

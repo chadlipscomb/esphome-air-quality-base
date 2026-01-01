@@ -1,0 +1,35 @@
+# REQUIRES substitutions:
+#   led_light_id  (example: onboard_led)
+
+select:
+  - platform: template
+    name: "LED Mode"
+    id: led_mode
+    optimistic: true
+    restore_value: true
+    initial_option: auto_pm
+    options:
+      - auto_pm
+      - manual
+      - off
+    on_value:
+      then:
+        - script.execute: led_apply_mode
+
+script:
+  - id: led_apply_mode
+    mode: restart
+    then:
+      - if:
+          condition:
+            lambda: 'return id(led_mode).state == "off";'
+          then:
+            - light.turn_off: ${led_light_id}
+
+      - if:
+          condition:
+            lambda: 'return id(led_mode).state == "manual";'
+          then:
+            - light.turn_on:
+                id: ${led_light_id}
+                brightness: 35%
