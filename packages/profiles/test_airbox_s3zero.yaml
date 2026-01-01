@@ -29,9 +29,22 @@ substitutions:
   disp_bl: GPIO7
   disp_rotation: "0"
 
+
+  # MiCS-6814 ADC pins
+  mics_adc_nh3: GPIO4
+  mics_adc_red: GPIO5
+  mics_adc_ox:  GPIO6
+
+  # MiCS behavior tuning
+  mics_update:  2s
+  mics_smooth_window: "30"
+  mics_warmup:  180s
+  mics_baseline_alpha: "0.002"
+  mics_scale: "0.25"
+
   led_light_id: onboard_led
   pm_worst_level_id: sps30_pm_worst_level
-  
+
 packages:
   common_base: !include ../common/base.yaml
   common_status: !include ../common/status.yaml
@@ -43,6 +56,8 @@ packages:
   dev_sps30: !include ../devices/sps30.yaml
   dev_scd4x: !include ../devices/scd4x.yaml
   dev_sds011: !include ../devices/sds011.yaml
+
+  mics6814: !include ../devices/mics6814.yaml
 
   feat_led_mode_select: !include ../features/led_mode_select.yaml
   glue_led_mode_auto_pm: !include ../glue/led_mode_auto_pm.yaml

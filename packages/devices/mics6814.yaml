@@ -1,0 +1,171 @@
+#substitutions:
+#  # MiCS-6814 ADC pins
+#  mics_adc_nh3: GPIO4
+#  mics_adc_red: GPIO5
+#  mics_adc_ox:  GPIO6
+#
+#  # MiCS behavior tuning
+#  mics_update:  2s
+#  mics_smooth_window: "30"
+#  mics_warmup:  180s
+#  mics_baseline_alpha: "0.002"
+#  mics_scale: "0.25"
+
+globals:
+  - id: mics_ready
+    type: bool
+    restore_value: no
+    initial_value: "false"
+
+  - id: mics_base_nh3
+    type: float
+    restore_value: yes
+    initial_value: "NAN"
+  - id: mics_base_red
+    type: float
+    restore_value: yes
+    initial_value: "NAN"
+  - id: mics_base_ox
+    type: float
+    restore_value: yes
+    initial_value: "NAN"
+
+esphome:
+  on_boot:
+    priority: -100
+    then:
+      - delay: ${mics_warmup}
+      - lambda: |-
+          id(mics_ready) = true;
+
+sensor:
+  # Raw ADC (0.0–1.0)
+  - platform: adc
+    pin: ${mics_adc_nh3}
+    id: mics_nh3_raw
+    name: "MiCS6814 NH3 Raw"
+    update_interval: ${mics_update}
+    attenuation: 11db
+    filters:
+      - sliding_window_moving_average:
+          window_size: ${mics_smooth_window}
+          send_every: 1
+
+  - platform: adc
+    pin: ${mics_adc_red}
+    id: mics_red_raw
+    name: "MiCS6814 RED Raw"
+    update_interval: ${mics_update}
+    attenuation: 11db
+    filters:
+      - sliding_window_moving_average:
+          window_size: ${mics_smooth_window}
+          send_every: 1
+
+  - platform: adc
+    pin: ${mics_adc_ox}
+    id: mics_ox_raw
+    name: "MiCS6814 OX Raw"
+    update_interval: ${mics_update}
+    attenuation: 11db
+    filters:
+      - sliding_window_moving_average:
+          window_size: ${mics_smooth_window}
+          send_every: 1
+
+  # Baseline updater (slow EMA once ready)
+  - platform: template
+    id: mics_baseline_tick
+    internal: true
+    update_interval: ${mics_update}
+    lambda: return 0;
+    on_value:
+      then:
+        - lambda: |-
+            if (!id(mics_ready)) return;
+
+            auto ema = [](float base, float x, float a) {
+              if (isnan(base)) return x;
+              return base + a * (x - base);
+            };
+
+            const float a = ${mics_baseline_alpha};
+
+            float nh3 = id(mics_nh3_raw).state;
+            float red = id(mics_red_raw).state;
+            float ox  = id(mics_ox_raw).state;
+
+            if (!isnan(nh3)) id(mics_base_nh3) = ema(id(mics_base_nh3), nh3, a);
+            if (!isnan(red)) id(mics_base_red) = ema(id(mics_base_red), red, a);
+            if (!isnan(ox))  id(mics_base_ox)  = ema(id(mics_base_ox),  ox,  a);
+
+  # Delta from baseline
+  - platform: template
+    name: "MiCS6814 NH3 Δ"
+    id: mics_nh3_delta
+    unit_of_measurement: ""
+    update_interval: ${mics_update}
+    lambda: |-
+      if (!id(mics_ready)) return NAN;
+      if (isnan(id(mics_base_nh3)) || isnan(id(mics_nh3_raw).state)) return NAN;
+      return id(mics_nh3_raw).state - id(mics_base_nh3);
+
+  - platform: template
+    name: "MiCS6814 RED Δ"
+    id: mics_red_delta
+    unit_of_measurement: ""
+    update_interval: ${mics_update}
+    lambda: |-
+      if (!id(mics_ready)) return NAN;
+      if (isnan(id(mics_base_red)) || isnan(id(mics_red_raw).state)) return NAN;
+      return id(mics_red_raw).state - id(mics_base_red);
+
+  - platform: template
+    name: "MiCS6814 OX Δ"
+    id: mics_ox_delta
+    unit_of_measurement: ""
+    update_interval: ${mics_update}
+    lambda: |-
+      if (!id(mics_ready)) return NAN;
+      if (isnan(id(mics_base_ox)) || isnan(id(mics_ox_raw).state)) return NAN;
+      return id(mics_ox_raw).state - id(mics_base_ox);
+
+  # “Usable” index (0–100) from delta
+  - platform: template
+    name: "MiCS6814 NH3 Index"
+    id: mics_nh3_index
+    unit_of_measurement: "%"
+    update_interval: ${mics_update}
+    lambda: |-
+      float d = id(mics_nh3_delta).state;
+      if (isnan(d)) return NAN;
+      float x = d / ${mics_scale};         // tune scale
+      if (x < 0) x = 0;
+      if (x > 1) x = 1;
+      return x * 100.0f;
+
+  - platform: template
+    name: "MiCS6814 RED Index"
+    id: mics_red_index
+    unit_of_measurement: "%"
+    update_interval: ${mics_update}
+    lambda: |-
+      float d = id(mics_red_delta).state;
+      if (isnan(d)) return NAN;
+      float x = d / ${mics_scale};
+      if (x < 0) x = 0;
+      if (x > 1) x = 1;
+      return x * 100.0f;
+
+  - platform: template
+    name: "MiCS6814 OX Index"
+    id: mics_ox_index
+    unit_of_measurement: "%"
+    update_interval: ${mics_update}
+    lambda: |-
+      float d = id(mics_ox_delta).state;
+      if (isnan(d)) return NAN;
+      float x = d / ${mics_scale};
+      if (x < 0) x = 0;
+      if (x > 1) x = 1;
+      return x * 100.0f;
