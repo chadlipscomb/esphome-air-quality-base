@@ -42,10 +42,10 @@ packages:
   dev_sds011: !include ../devices/sds011.yaml
 
   #feat_pm_levels: !include ../features/pm_levels.yaml
-  feat_led_status: !include ../features/pm_led_status.yaml
-  
-  glue_pm_source_select: !include ../glue/pm_source_select.yaml
-  glue_levels_to_led: !include ../glue/pm_levels_to_led.yaml
+  #eat_led_status: !include ../features/pm_led_status.yaml
+
+  #glue_pm_source_select: !include ../glue/pm_source_select.yaml
+  #glue_levels_to_led: !include ../glue/pm_levels_to_led.yaml
 
   # ---- Optional LVGL display stack (enable as a group) ----
   # hw_spi_a: !include ../hw/spi_a.yaml
