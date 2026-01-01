@@ -1,0 +1,3 @@
+ # Frees UART and reduces overhead. Sometimes necessary to avoid collisions on S3 boards.
+logger:
+  baud_rate: 0

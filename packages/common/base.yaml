@@ -1,8 +1,3 @@
-logger:
-  # Frees UART hardware for sensors on S3 boards
-  baud_rate: 0
-
-
 api:
   encryption:
     key: !secret api_key
