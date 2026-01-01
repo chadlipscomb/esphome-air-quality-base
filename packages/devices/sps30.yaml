@@ -118,8 +118,8 @@ text_sensor:
       };
 
       int worst = -1;
-      worst = std::max(worst, sev_pm25(id(sps30_in_pm25_ugm3)));
-      worst = std::max(worst, sev_pm10(id(sps30_in_pm10_ugm3)));
+      worst = std::max(worst, sev_pm25(id(sps30_pm_2_5)));
+      worst = std::max(worst, sev_pm10(id(sps30_pm_10_0)));
 
       if (worst < 0) return std::string("Unknown");
       if (worst == 0) return std::string("Green");
