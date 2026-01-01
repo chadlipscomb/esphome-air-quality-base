@@ -7,11 +7,11 @@ select:
     id: led_mode
     optimistic: true
     restore_value: true
-    initial_option: auto_pm
+    initial_option: "auto_pm"
     options:
-      - auto_pm
-      - manual
-      - off
+      - "auto_pm"
+      - "manual"
+      - "off"
     on_value:
       then:
         - script.execute: led_apply_mode
