@@ -61,7 +61,11 @@ packages:
 
   feat_led_mode_select: !include ../features/led_mode_select.yaml
   glue_led_mode_auto_pm: !include ../glue/led_mode_auto_pm.yaml
+  # Will test managed updates later
+  #feat_managed_update_on_boot: !include ../features/managed_update_on_boot.yaml
 
+
+  # Will probably discard these later. 
   #feat_pm_levels: !include ../features/pm_levels.yaml
   #eat_led_status: !include ../features/pm_led_status.yaml
 

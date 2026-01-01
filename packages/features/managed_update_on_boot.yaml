@@ -1,0 +1,27 @@
+#  UNTESTED
+# REQUIRES substitutions:
+#   fw_manifest_url      (https://.../manifest.json)
+# OPTIONAL substitutions:
+#   fw_update_delay      (default: 30s)
+
+substitutions:
+  fw_update_delay: 30s
+
+http_request:
+
+ota:
+  - platform: http_request
+
+update:
+  - platform: http_request
+    id: fw_update
+    name: "Firmware Update"
+    source: ${fw_manifest_url}
+
+wifi:
+  on_connect:
+    then:
+      - delay: ${fw_update_delay}
+      - update.perform:
+          id: fw_update
+          force_update: false
