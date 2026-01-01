@@ -12,10 +12,12 @@
 #  mics_scale: "0.25"
 
 globals:
+globals:
   - id: mics_ready
     type: bool
     restore_value: no
     initial_value: "false"
+
 
   - id: mics_base_nh3
     type: float
@@ -30,11 +32,10 @@ globals:
     restore_value: yes
     initial_value: "NAN"
 
-esphome:
-  on_boot:
-    priority: -100
+interval:
+  - interval: 1h
+    startup_delay: ${mics_warmup}
     then:
-      - delay: ${mics_warmup}
       - lambda: |-
           id(mics_ready) = true;
 
