@@ -30,18 +30,6 @@ substitutions:
   disp_rotation: "0"
 
 
-  # MiCS-6814 ADC pins
-  mics_adc_nh3: GPIO4
-  mics_adc_red: GPIO5
-  mics_adc_ox:  GPIO6
-
-  # MiCS behavior tuning
-  mics_update:  2s
-  mics_smooth_window: "30"
-  mics_warmup:  180s
-  mics_baseline_alpha: "0.002"
-  mics_scale: "0.25"
-
   led_light_id: onboard_led
   pm_worst_level_id: sps30_pm_worst_level
 
@@ -56,8 +44,6 @@ packages:
   dev_sps30: !include ../devices/sps30.yaml
   dev_scd4x: !include ../devices/scd4x.yaml
   dev_sds011: !include ../devices/sds011.yaml
-
-  mics6814: !include ../devices/mics6814.yaml
 
   feat_led_mode_select: !include ../features/led_mode_select.yaml
   glue_led_mode_auto_pm: !include ../glue/led_mode_auto_pm.yaml
@@ -77,3 +63,8 @@ packages:
   # disp_driver: !include ../displays/display_gc9a01.yaml
   # feat_ui_lvgl: !include ../features/ui_lvgl.yaml
   # glue_pm_to_ui: !include ../glue/pm_to_ui.yaml
+
+
+  # The MICS is a PAIN to calculate values from, and the values contain crosstalk across sensors.
+  # Will revisit or abandon. 
+  # mics6814: !include ../devices/mics6814.yaml
