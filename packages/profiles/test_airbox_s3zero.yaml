@@ -37,7 +37,6 @@ font:
 display:
   - platform: ssd1306_i2c
     id: oled
-    i2c_id: i2c_a
     address: ${oled_address}
     model: "SSD1306 128x64"
     update_interval: ${oled_update}
