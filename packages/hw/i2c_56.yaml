@@ -1,0 +1,8 @@
+# SDA on 5, SCL on 6. Good for ESP32-S3-Zerp
+i2c:
+  - id: i2c_56
+    sda: GPIO5
+    scl: GPIO6
+    scan: true
+    sda_pullup_enabled: true
+    scl_pullup_enabled: true
