@@ -4,7 +4,6 @@ substitutions:
 
   # I2C A bus pins (leave frequency unset; SPS30 can be picky)
   i2c_a_sda: GPIO5
-
   i2c_a_scl: GPIO6
 
   # UART A pins (avoid uart0/1 naming entirely)
@@ -38,7 +37,7 @@ font:
 display:
   - platform: ssd1306_i2c
     id: oled
-    i2c_id: ${oled_i2c_id}
+    i2c_id: i2c_a
     address: ${oled_address}
     model: "SSD1306 128x64"
     update_interval: ${oled_update}
