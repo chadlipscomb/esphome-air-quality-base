@@ -28,29 +28,29 @@ substitutions:
 
   led_light_id: onboard_led
   pm_worst_level_id: sps30_pm_worst_level
-
-font:
-  - file: "gfonts://Roboto Mono"
-    id: oled_font
-    size: 12
-
-display:
-  - platform: ssd1306_i2c
-    id: oled
-    i2c_id: i2c_a
-    address: 0x3C
-    model: "SSD1306 128x64"
-    update_interval: 1s
-    pages:
-      - id: page_hello
-        lambda: |-
-          it.printf(0, 0, id(oled_font), "Hello world");
-
-interval:
-  - interval: ${oled_page_interval}
-    then:
-      - display.page.show_next: oled
-      - component.update: oled
+# troubleshooting display
+#font:
+#  - file: "gfonts://Roboto Mono"
+#    id: oled_font
+#    size: 12
+#
+#display:
+#  - platform: ssd1306_i2c
+#    id: oled
+#    i2c_id: i2c_a
+#    address: 0x3C
+#    model: "SSD1306 128x64"
+#    update_interval: 1s
+#    pages:
+#      - id: page_hello
+#        lambda: |-
+#          it.printf(0, 0, id(oled_font), "Hello world");
+#
+#interval:
+#  - interval: ${oled_page_interval}
+#    then:
+#      - display.page.show_next: oled
+#      - component.update: oled
 packages:
   common_base: !include ../common/base.yaml
   common_status: !include ../common/status.yaml
@@ -59,9 +59,9 @@ packages:
   hw_i2c_a: !include ../hw/i2c_a.yaml
   hw_uart_a: !include ../hw/uart_a.yaml
 
-  dev_sps30: !include ../devices/sps30.yaml
-  dev_scd4x: !include ../devices/scd4x.yaml
-  dev_sds011: !include ../devices/sds011.yaml
+  #dev_sps30: !include ../devices/sps30.yaml
+  #dev_scd4x: !include ../devices/scd4x.yaml
+  #dev_sds011: !include ../devices/sds011.yaml
 
   #feat_led_mode_select: !include ../features/led_mode_select.yaml
   #glue_led_mode_auto_pm: !include ../glue/led_mode_auto_pm.yaml
