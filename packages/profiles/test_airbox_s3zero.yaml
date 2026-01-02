@@ -72,7 +72,7 @@ packages:
 
   dev_sps30: !include ../devices/sps30.yaml
   dev_scd4x: !include ../devices/scd4x.yaml
-  #dev_sds011: !include ../devices/sds011.yaml
+  dev_sds011: !include ../devices/sds011.yaml
 
   #feat_led_mode_select: !include ../features/led_mode_select.yaml
   #glue_led_mode_auto_pm: !include ../glue/led_mode_auto_pm.yaml
