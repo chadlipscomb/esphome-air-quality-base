@@ -3,8 +3,9 @@ substitutions:
   led_pin: GPIO21
 
   # I2C A bus pins (leave frequency unset; SPS30 can be picky)
-  i2c_a_scl: GPIO6
   i2c_a_sda: GPIO5
+
+  i2c_a_scl: GPIO6
 
   # UART A pins (avoid uart0/1 naming entirely)
   uart_a_tx: GPIO43
@@ -20,12 +21,49 @@ substitutions:
   sps30_sma_window: "6"
 
   # Optional display (SPI A) pins (set if you enable display packages)
+  oled_address: "0x3C"
+  oled_update: 1s
+  oled_page_interval: 5s
 
 
 
   led_light_id: onboard_led
   pm_worst_level_id: sps30_pm_worst_level
 
+font:
+  - file: "gfonts://Roboto Mono"
+    id: font_small
+    size: 12
+
+display:
+  - platform: ssd1306_i2c
+    id: oled
+    i2c_id: ${oled_i2c_id}
+    address: ${oled_address}
+    model: "SSD1306 128x64"
+    update_interval: ${oled_update}
+    pages:
+      - id: page_pm
+        lambda: |-
+          it.printf(0, 0, id(font_small), "Hello world");
+          it.printf(0, 16, id(font_small), "PM2.5: %.1f", id(sps30_pm_2_5).state);
+          it.printf(0, 28, id(font_small), "PM10 : %.1f", id(sps30_pm_10_0).state);
+          it.printf(0, 40, id(font_small), "SDS2.5: %.1f", id(sds011_pm_2_5).state);
+          it.printf(0, 52, id(font_small), "SDS10 : %.1f", id(sds011_pm_10_0).state);
+
+      - id: page_scd
+        lambda: |-
+          it.printf(0, 0, id(font_small), "Hello world");
+          it.printf(0, 16, id(font_small), "CO2 : %.0f ppm", id(scd41_co2).state);
+          it.printf(0, 28, id(font_small), "Temp: %.1f", id(scd41_temp).state);
+          it.printf(0, 40, id(font_small), "Hum : %.1f%%", id(scd41_humidity).state);
+          it.printf(0, 52, id(font_small), "PM1 : %.1f", id(sps30_pm_1_0).state);
+
+interval:
+  - interval: ${oled_page_interval}
+    then:
+      - display.page.show_next: oled
+      - component.update: oled
 packages:
   common_base: !include ../common/base.yaml
   common_status: !include ../common/status.yaml
